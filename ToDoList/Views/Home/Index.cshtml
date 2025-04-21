@@ -4,24 +4,58 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">To Do</h1>
-    <ul class="list-unstyled">
-        @foreach (var item in Model.Items)
-        {
-            <li class="d-flex justify-content-between align-items-center mb-2">
-                <span>@item.Text</span>
-                <span>@(item.IsComplete ? "Done" : "Not Done")</span>
-                <form asp-action="ToggleComplete" asp-controller="Home" method="post" class="d-inline">
-                    <input type="hidden" name="id" value="@item.Id" />
-                    <input type="checkbox" name="isComplete" value="true" @(item.IsComplete ? "checked" : "") onchange="this.form.submit()" />
-                </form>
-                <form asp-action="Delete" asp-controller="Home" method="post" class="d-inline">
-                    <input type="hidden" name="id" value="@item.Id" />
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </li>
-        }
-    </ul>
-    <a class="btn btn-primary" href="/Home/Add">Add</a>
-</div>
+<section class="todo-container vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-8 col-xl-6">
+                <div class="card todo-card rounded-3">
+                    <div class="card-body todo-card-body p-4">
+
+                        <div class="todo-header mb-2">
+                            <span class="todo-title h2 me-2">To Do List</span>
+                            <span class="todo-badge badge bg-primary">tasks</span>
+                        </div>
+                        <p class="todo-date text-muted pb-2">@DateTime.Now.ToString("MM/dd/yyyy")</p>
+
+                        <ul class="list-group todo-list rounded-0">
+                            @foreach (var item in Model.Items)
+                            {
+                                <li class="list-group-item todo-item">
+                                    <form asp-action="ToggleComplete" asp-controller="Home" method="post" class="d-flex align-items-center w-100">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input class="form-check-input todo-checkbox" type="checkbox" name="isComplete" value="true" @(item.IsComplete ? "checked" : "") onchange="this.form.submit()" />
+
+                                        <span class="todo-item-text @(item.IsComplete ? "todo-item-completed" : "")">
+                                            @item.Text
+                                        </span>
+
+                                        <form asp-action="Delete" asp-controller="Home" method="post">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="todo-delete-btn btn btn-sm btn-link">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+
+                        <div class="todo-divider">
+                            <div class="todo-divider-line"></div>
+                            <p class="todo-divider-text text-center mx-3 mb-0">Actions</p>
+                            <div class="todo-divider-line"></div>
+                        </div>
+
+                        <div class="text-center">
+                            <a class="todo-add-btn btn btn-primary" href="/Home/Add">
+                                <i class="fas fa-plus me-2"></i>Add New Task
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
